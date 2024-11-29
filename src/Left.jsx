@@ -44,14 +44,14 @@ export default function Left() {
     return result;
   };
 
-  // Подсчёт общего количества уникальных имён (не дубликаты)
   const uniqueNamesCount = [...names].filter((name) => !duplicates[name]).length;
 
-  // Подсчёт общего количества дубликатов
   const duplicateCount = Object.values(duplicates).reduce((acc, count) => acc + count - 1, 0);
 
-  // Подсчёт общего количества добавленных имён (уникальные + дубликаты)
-  const totalNamesCount = [...names].length + duplicateCount;
+  const totalDuplicates = Object.values(duplicates).reduce((acc, count) => acc + count, 0);
+
+  const totalNamesCount =
+    [...names].length + Object.values(duplicates).reduce((acc, count) => acc + count, 0);
 
   return (
     <form onSubmit={handleAddName}>
@@ -64,13 +64,6 @@ export default function Left() {
             placeholder="Введите имена и фамилии"
           />
           <button type="submit">ADD</button>
-        </div>
-
-        <div>
-          <h3>Summary:</h3>
-          <p>Общее количество уникальных не дублирующихся имён: {uniqueNamesCount}</p>
-          <p>Общее количество дубликатов: {duplicateCount}</p>
-          <p>Общее количество добавленных имён: {totalNamesCount}</p>
         </div>
 
         <div>
@@ -91,6 +84,12 @@ export default function Left() {
               </li>
             ))}
           </ol>
+        </div>
+        <div>
+          <h3>Summary:</h3>
+          <p>Общее количество уникальных не дублирующихся имён: {uniqueNamesCount}</p>
+          <p>Общее количество дубликатов (всего): {totalDuplicates}</p>
+          <p>Общее количество добавленных имён (включая дубликаты): {totalNamesCount}</p>
         </div>
       </div>
     </form>
