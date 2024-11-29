@@ -28,7 +28,7 @@ export default function Left() {
 
       setNames(newNames);
       setDuplicates(newDuplicates);
-      setCurrentName(''); 
+      setCurrentName('');
     }
   };
 
@@ -37,12 +37,21 @@ export default function Left() {
     const result = [];
 
     for (let i = 0; i < parts.length; i += 2) {
-      const name = parts.slice(i, i + 2).join(' '); 
+      const name = parts.slice(i, i + 2).join(' ');
       result.push(name);
     }
 
     return result;
   };
+
+  // Подсчёт общего количества уникальных имён (не дубликаты)
+  const uniqueNamesCount = [...names].filter((name) => !duplicates[name]).length;
+
+  // Подсчёт общего количества дубликатов
+  const duplicateCount = Object.values(duplicates).reduce((acc, count) => acc + count - 1, 0);
+
+  // Подсчёт общего количества добавленных имён (уникальные + дубликаты)
+  const totalNamesCount = [...names].length + duplicateCount;
 
   return (
     <form onSubmit={handleAddName}>
@@ -58,6 +67,13 @@ export default function Left() {
         </div>
 
         <div>
+          <h3>Summary:</h3>
+          <p>Общее количество уникальных не дублирующихся имён: {uniqueNamesCount}</p>
+          <p>Общее количество дубликатов: {duplicateCount}</p>
+          <p>Общее количество добавленных имён: {totalNamesCount}</p>
+        </div>
+
+        <div>
           <h3>Names:</h3>
           <ol>
             {[...names].map((namePart, index) => (
@@ -68,13 +84,13 @@ export default function Left() {
 
         <div>
           <h3>Duplicates:</h3>
-          <ul>
+          <ol>
             {Object.entries(duplicates).map(([duplicate, count], index) => (
               <li key={index}>
                 {duplicate}: {count}
               </li>
             ))}
-          </ul>
+          </ol>
         </div>
       </div>
     </form>
